@@ -60,7 +60,7 @@
 
 
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
+    <div class="content-wrapper" ng-app="redeApp">
       <!-- Content Header (Page header) -->
       <section class="content-header">
         <div class="container-fluid">
@@ -74,26 +74,26 @@
       <section class="content">
         <div class="container-fluid">
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3" ng-controller="ProfileCtrl">
 
               <!-- Profile Image -->
               <div class="card card-primary card-outline">
                 <div class="card-body box-profile">
                   <div class="text-center">
-                    <img class="profile-user-img img-fluid img-circle" src="dist/img/user4-128x128.jpg" alt="User profile picture">
+                    <img class="profile-user-img img-fluid img-circle" ng-src="{{perfil.foto}}" alt="{{perfil.nome}}">
                   </div>
 
-                  <h3 class="profile-username text-center">Joana Darc</h3>
+                  <h3 class="profile-username text-center">{{perfil.nome}}</h3>
 
-                  <p class="text-muted text-center">Arquiteta de Software
+                  <p class="text-muted text-center">{{perfil.profissao}}
                     <br>
-                    <a href="mailto:joana.darc@babiloniasoftware.com.br">joana.darc@babiloniasoftware.com.br</a>
+                    <a href="mailto:joana.darc@babiloniasoftware.com.br">{{perfil.email}}</a>
                   </p>
 
                   <ul class="list-group list-group-unbordered mb-3">
                     <li class="list-group-item">
                       <b>Postagens</b>
-                      <a class="float-right">4</a>
+                      <a class="float-right">{{perfil.nPost}}</a>
                     </li>
                   </ul>
                 </div>
@@ -111,25 +111,16 @@
                   <strong>
                     <i class="fa fa-building" aria-hidden="true"></i> Trabalhou em </strong>
                   <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                      <i class="fa fa-handshake-o" aria-hidden="true"></i> 2017 a atual - Babilonia Sistemas
-                    </li>
-                    <li class="list-group-item">
-                      <i class="fa fa-handshake-o" aria-hidden="true"></i> 2015 a 2017 - UFC Sistemas
-                    </li>
-                    <li class="list-group-item">
-                      <i class="fa fa-handshake-o" aria-hidden="true"></i> 2010 a 2015 - Ling Ling Sistemas
+                    <li class="list-group-item" ng-repeat="p in perfil.trabalhos">
+                      <i class="fa fa-handshake-o" aria-hidden="true"></i> {{p.periodo}} - {{p.nome}}
                     </li>
                   </ul>
 
                   <strong>
                     <i class="fa fa-book mr-1"></i> Estudou em </strong>
                   <ul class="list-group list-group-unbordered mb-3">
-                    <li class="list-group-item">
-                      <i class="fa fa-pencil mr-1" aria-hidden="true"></i> 2012 a 2014 - FAFIFO Pós Graduações
-                    </li>
-                    <li class="list-group-item">
-                      <i class="fa fa-pencil mr-1" aria-hidden="true"></i> 2008 a 2012 - FAFIFO Graduações
+                    <li class="list-group-item" ng-repeat="e in perfil.estudos">
+                      <i class="fa fa-pencil mr-1" aria-hidden="true"></i> {{e.periodo}} - {{e.nome}}
                     </li>
                   </ul>
                 </div>
@@ -138,177 +129,123 @@
               <!-- /.card -->
             </div>
             <!-- /.col -->
-            <div class="col-md-9">
+            <div class="col-md-9" ng-controller="PostCtrl">
               <div class="card">
-                <!-- <div class="card-header p-2">
-                <ul class="nav nav-pills">
-                  <li class="nav-item"><a class="nav-link active" href="#activity" data-toggle="tab">Activity</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#timeline" data-toggle="tab">Timeline</a></li>
-                  <li class="nav-item"><a class="nav-link" href="#settings" data-toggle="tab">Settings</a></li>
-                </ul>
-              </div> -->
+                <div class="card-header p-2">
+                  <ul class="nav nav-pills">
+                    <li class="nav-item">
+                      <a class="nav-link active" href="#activity" data-toggle="tab">Posts</a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" href="#settings" data-toggle="tab">Publicar Conteúdo</a>
+                    </li>
+                  </ul>
+                </div>
                 <!-- /.card-header -->
                 <div class="card-body">
                   <div class="tab-content">
                     <div class="active tab-pane" id="activity">
                       <!-- Post -->
-                      <div class="post">
-                        <div class="user-block">
-                          <img class="img-circle img-bordered-sm" src="dist/img/user1-128x128.jpg" alt="user image">
-                          <span class="username">
-                            <a href="#">João Feliz da Silva Jr.</a>
+                      <div class="post" ng-repeat="post in posts">
+                        <div class="post">
+                          <div class="user-block">
+                            <img class="img-circle img-bordered-sm" ng-src="{{post.foto}}" alt="user image">
+                            <span class="username">
+                              <a href="#">{{post.nome}}</a>
 
-                          </span>
-                          <span class="description">Publicado às 19:30</span>
-                        </div>
-                        <!-- /.user-block -->
-                        <p>
-                          Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for
-                          its demise, but others ignore the hate as they create awesome tools to help create filler text
-                          for everyone from bacon lovers to Charlie Sheen fans.
-                        </p>
-
-                        <p>
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Gostei">12 
-                            <i class="fa fa-thumbs-o-up mr-1"></i></a> |
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Não Gostei">0 
-                            <i class="fa fa-thumbs-o-down mr-1"></i></a>
-                          <span class="float-right">
-                            <a href="#" class="link-black text-sm">
-                              <i class="fa fa-comments-o mr-1"></i> Comentários (1)
-                            </a>
-                          </span>
-                        </p>
-
-                        <form class="form-horizontal">
-                          <div class="input-group input-group-sm mb-0">
-                            <input class="form-control form-control-sm" placeholder="Escreva um comentário...">
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                              </button>
-                            </div>
+                            </span>
+                            <span class="description">Publicado às {{post.dtPublicacao}}</span>
                           </div>
-                        </form>
-
-                      </div>
-                      <!-- /.post -->
-
-                      <!-- Post -->
-                      <div class="post clearfix" style="margin-left:2.5%">
-                        <div class="user-block">
-                          <img class="img-circle img-bordered-sm" src="dist/img/user7-128x128.jpg" alt="User Image">
-                          <span class="username">
-                            <a href="#">Josefa Cury</a>
-
-                          </span>
-                          <span class="description">Respondida às 19:41</span>
-                        </div>
-                        <!-- /.user-block -->
-                        <p>
-                          Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for
-                          its demise, but others ignore the hate as they create awesome tools to help create filler text
-                          for everyone from bacon lovers to Charlie Sheen fans.
-                        </p>
-                        <p>
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Gostei">1 
-                            <i class="fa fa-thumbs-o-up mr-1"></i></a> |
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Não Gostei">0 
-                            <i class="fa fa-thumbs-o-down mr-1"></i></a>
-                        </p>
-                        <form class="form-horizontal">
-                          <div class="input-group input-group-sm mb-0">
-                            <input class="form-control form-control-sm" placeholder="Resposta....">
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <!-- /.post -->
-
-                      <!-- Post -->
-                      <div class="post">
-                        <div class="user-block">
-                          <img class="img-circle img-bordered-sm" src="dist/img/user6-128x128.jpg" alt="User Image">
-                          <span class="username">
-                            <a href="#">James Jones</a>
-                          </span>
-                          <span class="description">Postou 1 foto à cinco dias</span>
-                        </div>
-                        <!-- /.user-block -->
-                        <div class="row mb-12">
-                          <div class="col-sm-12">
-                            <img class="img-fluid" src="dist/img/photo1.png" alt="Photo">
-                          </div>
-                        </div>
-                        <br>
-
-                        <p>
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Gostei">244 
-                            <i class="fa fa-thumbs-o-up mr-1"></i></a> |
-                          <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Não Gostei">5 
-                            <i class="fa fa-thumbs-o-down mr-1"></i></a>
-                          <span class="float-right">
-                            <a href="#" class="link-black text-sm">
-                              <i class="fa fa-comments-o mr-1"></i> Comentários (1)
-                            </a>
-                          </span>
-                        </p>
-
-                        <form class="form-horizontal">
-                          <div class="input-group input-group-sm mb-0">
-                            <input class="form-control form-control-sm" placeholder="Escreva um comentário...">
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-danger">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </form>
-                      </div>
-                      <!-- /.post -->
-                      <!-- Post -->
-                      <div class="post clearfix" style="margin-left:2.5%">
-                        <div class="user-block">
-                          <img class="img-circle img-bordered-sm" src="dist/img/user5-128x128.jpg" alt="User Image">
-                          <span class="username">
-                            <a href="#">Jurema Clarkson</a>
-
-                          </span>
-                          <span class="description">Respondida a cinco dias</span>
-                        </div>
-                        <!-- /.user-block -->
-                        <p>
-                          Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for
-                          its demise, but others ignore the hate as they create awesome tools to help create filler text
-                          for everyone from bacon lovers to Charlie Sheen fans.
-                        </p>
-
-                        <p>
-                            <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Gostei">12 
-                              <i class="fa fa-thumbs-o-up mr-1"></i></a> |
-                            <a href="#" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom" title="Não Gostei">1 
-                              <i class="fa fa-thumbs-o-down mr-1"></i></a>
+                          <!-- /.user-block -->
+                          <p ng-bind-html="post.descricao">
                           </p>
 
-                        <form class="form-horizontal">
-                          <div class="input-group input-group-sm mb-0">
-                            <input class="form-control form-control-sm" placeholder="Resposta....">
-                            <div class="input-group-append">
-                              <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-paper-plane" aria-hidden="true"></i>
-                              </button>
+                          <p>
+                            <a style="cursor:pointer" ng-click="addLike(post.id)" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom"
+                              title="Gostei">{{post.likes}}
+                              <i class="fa fa-thumbs-o-up mr-1"></i>
+                            </a> |
+                            <a style="cursor:pointer" ng-click="addDislike(post.id)" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom"
+                              title="Não Gostei">{{post.dislikes}}
+                              <i class="fa fa-thumbs-o-down mr-1"></i>
+                            </a>
+                            <span class="float-right">
+                              <a ng-click="post.openComment = !post.openComment" style="cursor:pointer;" class="link-black text-sm">
+                                <i class="fa fa-comments-o mr-1"></i> Comentários ({{post.nComentarios}})
+                              </a>
+                            </span>
+                          </p>
+
+                          <form class="form-horizontal">
+                            <div class="input-group input-group-sm mb-0">
+                              <input class="form-control form-control-sm" placeholder="Escreva um comentário...">
+                              <div class="input-group-append">
+                                <button type="submit" class="btn btn-danger">
+                                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                              </div>
                             </div>
+                          </form>
+
+                        </div>
+                        <!-- /.post -->
+
+                        <!-- Post -->
+                        <div class="post clearfix" ng-if="post.nComentarios > 0" ng-show="post.openComment" ng-repeat="c in post.comentarios" style="margin-left:2.5%">
+                          <div class="user-block">
+                            <img class="img-circle img-bordered-sm" ng-src=" {{c.foto}}" alt="{{c.nome}}">
+                            <span class="username">
+                              <a href="#">{{c.nome}}</a>
+
+                            </span>
+                            <span class="description">Respondida às {{c.dtPublicacao}}</span>
                           </div>
-                        </form>
+                          <!-- /.user-block -->
+                          <p ng-bind-html="c.descricao">
 
-
+                          </p>
+                          <p>
+                            <a style="cursor:pointer" ng-click="addLike(c.id)" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom"
+                              title="Gostei">{{c.likes}}
+                              <i class="fa fa-thumbs-o-up mr-1"></i>
+                            </a> |
+                            <a style="cursor:pointer" ng-click="addDislike(c.id)" class="link-black text-sm" data-toggle="tooltip" data-placement="bottom"
+                              title="Não Gostei">{{c.dislikes}}
+                              <i class="fa fa-thumbs-o-down mr-1"></i>
+                            </a>
+                          </p>
+                          <form class="form-horizontal">
+                            <div class="input-group input-group-sm mb-0">
+                              <input class="form-control form-control-sm" placeholder="Resposta....">
+                              <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">
+                                  <i class="fa fa-paper-plane" aria-hidden="true"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </form>
+                        </div>
                       </div>
                       <!-- /.post -->
 
+                    </div>
+                    <div class="tab-pane" id="settings">
+                      <form class="form-horizontal">
+
+                        <div class="form-group">
+                          <label for="inputExperience" class="col-sm-2 control-label">Conteúdo</label>
+
+                          <div class="col-sm-10">
+                            <textarea class="form-control" id="inputExperience" placeholder="Digite aqui sua publicação"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="form-group">
+                          <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-success">Publicar</button>
+                          </div>
+                        </div>
+                      </form>
                     </div>
 
                     <!-- /.tab-pane -->
@@ -355,9 +292,20 @@
   <!-- AdminLTE for demo purposes -->
   <script src="dist/js/demo.js"></script>
 
-  <script>
-      $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-      })
+  <script src="node_modules/angular/angular.min.js">
   </script>
+  <script src="node_modules/angular/angular-sanitize.min.js"></script>
+  <script src="app/app.js">
+  </script>
+  <script src="app/controllers/PostCtrl.js">
+  </script>
+  <script src="app/controllers/ProfileCtrl.js">
+  </script>
+
+  <script>
+    $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+    })
+  </script>
+
 </html>
