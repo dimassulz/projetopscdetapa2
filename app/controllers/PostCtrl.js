@@ -1,7 +1,7 @@
 app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
     $scope.posts = [{
             id: 1,
-            idPessoa:1,
+            idPessoa: 1,
             nome: "João Feliz da Silva Jr.",
             foto: "dist/img/user1-128x128.jpg",
             dtPublicacao: "19:30",
@@ -9,31 +9,34 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             likes: 12,
             dislikes: 0,
             nComentarios: 1,
-            openComment:false,
+            openComment: false,
+            mostrarRespostas: false,
             comentarios: [{
-                id:3,
-                idPessoa:2,
+                id: 3,
+                idPessoa: 2,
                 nome: "Josefa Cury",
                 foto: "dist/img/user7-128x128.jpg",
                 dtPublicacao: "19:41",
                 tpDescricao: 'text',
                 descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
-                likes: 1,
+                likes: 2,
                 dislikes: 0,
-                nComentarios: 0,
-                openComment:false,
+                nComentarios: 1,
+                openComment: false,
+                mostrarRespostas: false,
                 comentarios: [{
-                    id:5,
-                    idPost:1,
-                    nome: "Josefa Cury",
-                    foto: "dist/img/user7-128x128.jpg",
+                    id: 5,
+                    idPost: 1,
+                    nome: "Josefa Bonifacia",
+                    foto: "dist/img/user3-128x128.jpg",
                     dtPublicacao: "19:41",
                     tpDescricao: 'text',
                     descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
-                    likes: 1,
+                    likes: 3,
                     dislikes: 0,
                     nComentarios: 0,
-                    openComment:false,
+                    openComment: false,
+                    mostrarRespostas: false,
                     comentarios: []
                 }]
             }]
@@ -49,10 +52,11 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             likes: 244,
             dislikes: 8,
             nComentarios: 1,
-            openComment:false,
+            openComment: false,
+            mostrarRespostas: false,
             comentarios: [{
-                id:4,
-                idPost:2,
+                id: 7,
+                idPost: 2,
                 nome: "Jurema Clarkson",
                 foto: "dist/img/user5-128x128.jpg",
                 dtPublicacao: "23:41",
@@ -60,11 +64,12 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
                 likes: 12,
                 dislikes: 1,
                 nComentarios: 0,
-                openComment:false,
+                openComment: false,
+                mostrarRespostas: false,
                 comentarios: []
-            },{
-                id:5,
-                idPost:2,
+            }, {
+                id: 8,
+                idPost: 2,
                 nome: "Jurema Clarkson",
                 foto: "dist/img/user5-128x128.jpg",
                 dtPublicacao: "23:41",
@@ -72,25 +77,47 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
                 likes: 12,
                 dislikes: 1,
                 nComentarios: 0,
-                openComment:false,
+                openComment: false,
+                mostrarRespostas: false,
                 comentarios: []
             }]
         }
     ];
 
-    $scope.addLike = (id) => {
-        $scope.posts.filter(post => {
-            (post.id === id) ? post.likes++: post.comentarios.filter(p => { p.id === id ? p.likes++: p.likes})
+
+    $scope.addLike = (objPost, comentarios = null) => {
+        let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
+        scopePosts.filter(post => {
+            (post.id === objPost.id) ? post.likes++: $scope.addLike(objPost, post.comentarios)
         })
+        $scope.posts = scopePosts;
     }
 
-    $scope.addDislike = (id) => {
-        $scope.posts.filter(post => {
-            (post.id === id) ? post.dislikes++: post.comentarios.filter(p => { p.id === id ? p.dislikes++: p.dislikes})
+    $scope.addDislike = (objPost, comentarios = null) => {
+        let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
+        scopePosts.filter(post => {
+            (post.id === objPost.id) ? post.dislikes++: $scope.addDislike(objPost, post.comentarios)
         })
+        $scope.posts = scopePosts;
     }
 
-    $scope.addResposta = () => {
-        
+    $scope.postar = (id) => {
+        Swal('Post publicado com sucesso!')
+    }
+
+    $scope.responder = (objPost, open, comentarios = null) => {
+        let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
+        scopePosts.filter(post => {
+            post.openComment = (post.id === objPost.id ? open : $scope.responder(objPost, open, post.comentarios));
+        });
+        $scope.posts = scopePosts;
+    }
+
+    $scope.mostrarRespostas = (objPost, open, comentarios = null) => {
+        let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
+        scopePosts.filter(post => {
+            post.mostrarRespostas = (post.id === objPost.id ? open : $scope.responder(objPost, open, post.comentarios));
+        });
+        $scope.posts = scopePosts;
     }
 }]);
