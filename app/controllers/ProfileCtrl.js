@@ -1,5 +1,6 @@
 app.controller('ProfileCtrl', ['$scope', ($scope) => {
     $scope.perfil = {
+        id: 1,
         nome: "Joana Darc",
         foto: "dist/img/user4-128x128.jpg",
         profissao: "Arquiteta de Software",
@@ -22,5 +23,11 @@ app.controller('ProfileCtrl', ['$scope', ($scope) => {
             periodo: "2008 a 2012",
             nome: "FAFIFO Graduações"
         }]
+    };
+
+    $scope.buscarPerfilAtivo = (id) => {
+        $scope.perfil.filter((p) => {
+            return p.id === id ? p : {};
+        });
     };
 }]);
