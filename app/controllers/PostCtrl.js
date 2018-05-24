@@ -172,7 +172,7 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
     $scope.responder = (objPost, open, comentarios = null) => {
         let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
         scopePosts.filter(post => {
-            (post.id === objPost.id) ? post.descricao : $scope.responder(objPost, open, post.comentarios)
+            post.openComment = (post.id === objPost.id ? open : $scope.responder(objPost, open, post.comentarios));
         });
         $scope.posts = scopePosts;
     };
