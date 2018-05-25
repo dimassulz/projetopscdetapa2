@@ -72,7 +72,7 @@
         <section class="content">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-3" ng-controller="ProfileCtrl">
+                    <div class="col-md-3" ng-controller="PostCtrl">
 
                         <!-- Profile Image -->
                         <div class="card card-primary card-outline">
@@ -89,12 +89,6 @@
                                     <a href="mailto:joana.darc@babiloniasoftware.com.br">{{perfil.email}}</a>
                                 </p>
 
-                                <ul class="list-group list-group-unbordered mb-3">
-                                    <li class="list-group-item">
-                                        <b>Postagens</b>
-                                        <a class="float-right">{{perfil.nPost}}</a>
-                                    </li>
-                                </ul>
                             </div>
                             <!-- /.card-body -->
                         </div>
@@ -167,7 +161,7 @@
                                             </div>
                                             <!-- /.user-block -->
                                             <div ng-bind-html="post.descricao"></div>
-
+                                            <br>
                                             <p>
                                                 <a style="cursor:pointer" ng-click="addLike(post)"
                                                    class="link-black text-sm" data-toggle="tooltip"
@@ -189,19 +183,19 @@
                                                     <i class="fa fa-reply" aria-hidden="true"></i>
                                                 </a>
                                                 <span class="float-right">
-                            <a ng-click="c(post, !post.mostrarRespostas)" style="cursor:pointer;"
+                            <a ng-click="mostrarRespostas(post, !post.mostrarRespostasOpen)" style="cursor:pointer;"
                                class="link-black text-sm">
                               <i class="fa fa-comments-o mr-1"></i>
-                              Comentários ({{post.nComentarios}})
+                              Comentários ({{post.comentarios.length}})
                             </a>
                           </span>
                                             </p>
                                             <form class="form-horizontal" ng-show="post.openComment">
                                                 <div class="input-group input-group-sm mb-0">
-                                                    <input class="form-control form-control-sm" ng-model="comentario"
+                                                    <input class="form-control form-control-sm" ng-model="post.comentario"
                                                            placeholder="Escreva um comentário...">
                                                     <div class="input-group-append">
-                                                        <button type="button" ng-click="comentar(post.id)"
+                                                        <button type="button" ng-click="postar(post)"
                                                                 class="btn btn-danger">
                                                             <i class="fa fa-paper-plane" aria-hidden="true"></i>
                                                         </button>
@@ -210,8 +204,9 @@
                                                 <br>
                                             </form>
 
-                                            <div ng-if="post.comentarios.length > 0" style="margin-left:1.5%;">
-                                                <div class="post" ng-repeat="post in post.comentarios"
+                                            <div ng-if="post.comentarios.length > 0" ng-show="post.mostrarRespostasOpen" style="margin-left:2.5%;">
+                                            
+                                                <div class="post" ng-repeat="post in post.comentarios" 
                                                      ng-include="'categoryTree'">
                                                 </div>
                                             </div>

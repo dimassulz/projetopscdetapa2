@@ -26,7 +26,6 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
     };
     $scope.posts = [{
         id: 1,
-        idPessoa: 1,
         nome: "João Feliz da Silva Jr.",
         foto: "dist/img/user1-128x128.jpg",
         dtPublicacao: "19:30",
@@ -35,10 +34,9 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
         dislikes: 0,
         nComentarios: 1,
         openComment: false,
-        mostrarRespostas: false,
+        mostrarRespostasOpen: false,
         comentarios: [{
             id: 3,
-            idPessoa: 2,
             nome: "Josefa Cury",
             foto: "dist/img/user7-128x128.jpg",
             dtPublicacao: "19:41",
@@ -46,12 +44,10 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
             likes: 2,
             dislikes: 0,
-            nComentarios: 1,
             openComment: false,
-            mostrarRespostas: false,
+            mostrarRespostasOpen: false,
             comentarios: [{
                 id: 5,
-                idPost: 1,
                 nome: "Josefa Bonifacia",
                 foto: "dist/img/user3-128x128.jpg",
                 dtPublicacao: "19:41",
@@ -59,16 +55,14 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
                 descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
                 likes: 3,
                 dislikes: 0,
-                nComentarios: 0,
                 openComment: false,
-                mostrarRespostas: false,
+                mostrarRespostasOpen: false,
                 comentarios: []
             }]
         }]
     },
         {
             id: 2,
-            idPessoa: 1,
             nome: "James Jones",
             foto: "dist/img/user6-128x128.jpg",
             dtPublicacao: "21:37",
@@ -76,34 +70,30 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             descricao: '<div class="row mb-12"><div class="col-sm-12"><img class="img-fluid" src="dist/img/photo1.png" alt="Photo"></div></div>',
             likes: 244,
             dislikes: 8,
-            nComentarios: 1,
             openComment: false,
-            mostrarRespostas: false,
+            mostrarRespostasOpen: false,
             comentarios: [{
                 id: 7,
-                idPost: 2,
                 nome: "Jurema Clarkson",
                 foto: "dist/img/user5-128x128.jpg",
                 dtPublicacao: "23:41",
                 descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
                 likes: 12,
                 dislikes: 1,
-                nComentarios: 0,
                 openComment: false,
-                mostrarRespostas: false,
+                mostrarRespostasOpen: false,
                 comentarios: []
             },
                 {
                     id: 8,
-                    idPost: 2,
                     nome: "Jurema Clarkson",
                     foto: "dist/img/user5-128x128.jpg",
                     dtPublicacao: "23:41",
                     descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
                     likes: 12,
                     dislikes: 1,
-                    nComentarios: 0,
                     openComment: false,
+                    mostrarRespostasOpen: false,
                     mostrarRespostas: false,
                     comentarios: []
                 }]
@@ -141,29 +131,35 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             nome: $scope.perfil.nome,
             foto: $scope.perfil.foto,
             dtPublicacao: addZero(date.getHours()) + ":" + addZero(date.getMinutes()) + ":" + addZero(date.getSeconds()),
-            descricao: comentario === '' ? $scope.publicacao : comentario,
+            descricao: comentario,
             likes: 0,
             dislikes: 0,
             nComentarios: 0,
             openComment: false,
-            mostrarRespostas: false,
+            mostrarRespostasOpen: true,
             comentarios: []
         };
         return post;
     };
 
-    $scope.postar = () => {
-        $scope.posts.push($scope.objPost());
+    $scope.postar = (c = false) => {
+        if(!c){
+            $scope.posts.push($scope.objPost($scope.publicacao));
+            $scope.publicacao = '';
+            
+        }else{
+            c.comentarios.push($scope.objPost(c.comentario)); 
+            $scope.mostrarRespostas(c, true)
+            
+        }
         swal({
-            title: "Publicação",
-            text: "Postagem publicada com sucesso!",
+            text: "Publicado com sucesso!",
             type: "success",
             confirmButtonClass: "btn-success",
             confirmButtonText: "OK",
             closeOnConfirm: false,
             closeOnCancel: false
         }).then((result) => {
-            $scope.publicacao = '';
             $('a[href="#activity"]').trigger('click');
         })
 
@@ -171,6 +167,7 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
 
     $scope.responder = (objPost, open, comentarios = null) => {
         let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
+        
         scopePosts.filter(post => {
             post.openComment = (post.id === objPost.id ? open : $scope.responder(objPost, open, post.comentarios));
         });
@@ -178,9 +175,15 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
     };
 
     $scope.mostrarRespostas = (objPost, open, comentarios = null) => {
+        
         let scopePosts = (comentarios === null) ? angular.copy($scope.posts) : comentarios;
         scopePosts.filter(post => {
-            post.mostrarRespostas = (post.id === objPost.id ? open : $scope.responder(objPost, open, post.comentarios));
+            if(post.id === objPost.id){
+                post.mostrarRespostasOpen = open
+            }
+            if(post.comentarios.length > 0){
+                $scope.mostrarRespostas(objPost, open, post.comentarios);
+            }
         });
         $scope.posts = scopePosts;
     };
