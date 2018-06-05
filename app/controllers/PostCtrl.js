@@ -5,7 +5,6 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
         foto: "dist/img/user4-128x128.jpg",
         profissao: "Arquiteta de Software",
         email: "joana.darc@babiloniasoftware.com.br",
-        nPost: 4,
         trabalhos: [{
             periodo: "2017 a atual",
             nome: "Babilônia Sistemas"
@@ -32,7 +31,6 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
         descricao: "Lorem ipsum represents a long-held tradition for designers, typographers and the like. Some people hate it and argue for its demise, but others ignore the hate as they create awesome tools to help create filler text for everyone from bacon lovers to Charlie Sheen fans.",
         likes: 12,
         dislikes: 0,
-        nComentarios: 1,
         openComment: false,
         mostrarRespostasOpen: false,
         comentarios: [{
@@ -134,7 +132,6 @@ app.controller('PostCtrl', ['$scope', '$sce', ($scope, $sce) => {
             descricao: comentario,
             likes: 0,
             dislikes: 0,
-            nComentarios: 0,
             openComment: false,
             mostrarRespostasOpen: true,
             comentarios: []
