@@ -1,46 +1,46 @@
 app.controller("PostCtrl", [
   "$scope",
-  "$sce",
-  "$http",
-  ($scope, $sce, $http) => {
+  "PostService",
+  "PerfilService",
+  ($scope, PostService, PerfilService) => {
     $scope.init = () => {
-      $http
-        .get("getPosts")
-        .then(response => {
-          $scope.posts = response.data;
+      PostService.getAll().then((result) => {
+        $scope.posts = result;
+      }).catch(error => {
+        swal({
+          text: "Ocorreu um erro ao buscar os posts no sistema",
+          type: "error",
+          confirmButtonClass: "btn-error",
+          confirmButtonText: "OK",
+          closeOnConfirm: false,
+          closeOnCancel: false
         })
-        .catch(error => {
-          swal({
-            text: "Ocorreu um erro ao buscar os posts no sistema",
-            type: "error",
-            confirmButtonClass: "btn-error",
-            confirmButtonText: "OK",
-            closeOnConfirm: false,
-            closeOnCancel: false
-          });
-        });
+      });
     };
 
     $scope.buscarPerfil = (id = '5b1604de3472e73b8baf1c7e') => {
-      $http.get('perfil/'+id).then((response) => {
-          $scope.perfil = response.data;
-
+      PerfilService.get(id).then((result) => {
+        $scope.perfil = result;
       }).catch((error) => {
-          swal({
-              text: "Ocorreu um erro ao buscar o perfil no sistema",
-              type: "error",
-              confirmButtonClass: "btn-error",
-              confirmButtonText: "OK",
-              closeOnConfirm: false,
-              closeOnCancel: false
-          })
+        swal({
+          text: "Ocorreu um erro ao buscar o perfil no sistema",
+          type: "error",
+          confirmButtonClass: "btn-error",
+          confirmButtonText: "OK",
+          closeOnConfirm: false,
+          closeOnCancel: false
+        })
       });
-  }
+    }
 
     $scope.addLike = (id, parentId) => {
       $scope.posts.filter((post) => {
         if (post._id === id) {
           post.likes++;
+          let likeUpdate = {likes : post.likes};
+          PostService.update(post._id, likeUpdate).then((result) => {
+            console.log('ok like');
+          })
         }
         post.comentarios.filter((comentario) => {
           if (comentario._parent_id === parentId) {
@@ -54,6 +54,10 @@ app.controller("PostCtrl", [
       $scope.posts.filter((post) => {
         if (post._id === id) {
           post.dislikes++;
+          let likeUpdate = {dislikes : post.dislikes};
+          PostService.update(post._id, likeUpdate).then((result) => {
+            console.log('ok dislike');
+          })
         }
         post.comentarios.filter((comentario) => {
           if (comentario._parent_id === parentId) {
@@ -71,11 +75,11 @@ app.controller("PostCtrl", [
     }
 
     $scope.objPost = (comentario = "") => {
+
       let date = new Date();
       let post = {
-        _id: Math.floor(Math.random() * 3521 + 1),
-        nome: $scope.perfil.nome,
-        foto: $scope.perfil.foto,
+        _parent_id: null,
+        perfil: $scope.perfil,
         dtPublicacao: addZero(date.getHours()) +
           ":" +
           addZero(date.getMinutes()) +
@@ -93,8 +97,19 @@ app.controller("PostCtrl", [
 
     $scope.postar = (c = false) => {
       if (!c) {
-        $scope.posts.push($scope.objPost($scope.publicacao));
-        $scope.publicacao = "";
+          PostService.insert($scope.objPost($scope.publicacao)).then((result) => {
+            $scope.posts.push($scope.objPost($scope.publicacao));
+          }).catch(error => {
+            swal({
+              text: "Ocorreu um erro ao buscar os posts no sistema",
+              type: "error",
+              confirmButtonClass: "btn-error",
+              confirmButtonText: "OK",
+              closeOnConfirm: false,
+              closeOnCancel: false
+            })
+          });
+        
       } else {
         c.comentarios.push($scope.objPost(c.comentario));
         $scope.mostrarRespostas(c, true);
@@ -108,6 +123,7 @@ app.controller("PostCtrl", [
         closeOnCancel: false
       }).then(result => {
         $('a[href="#activity"]').trigger("click");
+        CKEDITOR.instances.editor1.setData('');
       });
     };
 

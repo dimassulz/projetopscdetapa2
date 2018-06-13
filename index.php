@@ -16,24 +16,51 @@ $app = new \Slim\App;
 $container = $app->getContainer();
 $container['renderer'] = new PhpRenderer("templates/");
 
-$app->get('/getPerfis', function (Request $request, Response $response, $args) {
+$app->get('/perfil/get', function (Request $request, Response $response, $args) {
     $mongo = new dbHandler();
     $result = $mongo->getAllPerfis();
     return $response->withJson($result);
 });
 
-$app->get('/perfil/{id}', function (Request $request, Response $response, $args) {
+$app->get('/perfil/get/{id}', function (Request $request, Response $response, $args) {
     $mongo = new dbHandler();
-    $id = $args['id'];
-    $result = $mongo->getIdPerfil($id);
+    $result = $mongo->getPerfil($args['id']);
     return $response->withJson($result);
 });
 
-$app->get('/getPosts', function (Request $request, Response $response, $args) {
+$app->get('/post/get', function (Request $request, Response $response, $args) {
     $mongo = new dbHandler();
-    $result = $mongo->getAllPosts();
+    $result = $mongo->getPosts();
     return $response->withJson($result);
 });
+
+$app->get('/post/get/{id}', function (Request $request, Response $response, $args) {
+    $mongo = new dbHandler();
+    $result = $mongo->getPost($args['id']);
+    return $response->withJson($result);
+});
+
+$app->post('/post/insert', function (Request $request, Response $response, $args) {
+    $arrPost = $request->getParsedBody();
+    $mongo = new dbHandler();
+    $result = $mongo->insertPost($arrPost);
+    return $response->withJson($result);
+});
+
+$app->put('/post/update/{id}', function (Request $request, Response $response, $args) {
+    $arrPost = $request->getParsedBody();
+    $mongo = new dbHandler();
+    $result = $mongo->updatePost(intval($args['id']), $arrPost);
+    return $response->withJson( $result);
+});
+
+$app->delete('/post/delete/{id}', function (Request $request, Response $response, $args) {
+    $mongo = new dbHandler();
+    $result = $mongo->removePost(intval($args['id']));
+    return $response->withJson($result);
+});
+
+
 
 $app->post('/home', function (Request $request, Response $response) {
     return $this->renderer->render($response, "principal.php");

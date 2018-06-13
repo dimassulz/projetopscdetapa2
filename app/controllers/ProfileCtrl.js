@@ -1,7 +1,7 @@
-app.controller('ProfileCtrl', ['$scope', '$http', ($scope, $http) => {
+app.controller('ProfileCtrl', ['$scope', 'PerfilService', ($scope, PerfilService) => {
     $scope.init = (id = '5b1604de3472e73b8baf1c7e') => {
-        $http.get('perfil/'+id).then((response) => {
-            $scope.perfil = response.data;
+        PerfilService.get(id).then((result) => {
+            $scope.perfil = result;
         }).catch((error) => {
             swal({
                 text: "Ocorreu um erro ao buscar o perfil no sistema",

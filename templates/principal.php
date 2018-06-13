@@ -327,6 +327,8 @@
 <script src="node_modules/angular/angular.min.js"></script>
 <script src="node_modules/angular/angular-sanitize.min.js"></script>
 <script src="app/app.js"></script>
+<script src="app/services/PerfilService.js"></script>
+<script src="app/services/PostService.js"></script>
 <script src="app/controllers/PostCtrl.js"></script>
 <script src="app/controllers/ProfileCtrl.js"></script>
 
