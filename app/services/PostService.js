@@ -65,6 +65,22 @@ app.factory("PostService", ($http) => {
         return promise;
     };
 
+    thisPostService.updateComments = (id, data) => {
+        let promise = $http({
+                method: 'PUT',
+                url: 'post/update-comments/' + id,
+                data: data
+            })
+            .then((response) => {
+                    return response.data;
+                },
+                (response) => {
+                    return response.status;
+                });
+
+        return promise;
+    };
+
     thisPostService.delete = (id) => {
         let promise = $http({
                 method: 'DELETE',

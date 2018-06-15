@@ -19,25 +19,35 @@ app.controller("PostCtrl", [
     };
 
     $scope.buscarPerfil = (id = '5b1604de3472e73b8baf1c7e') => {
-      PerfilService.get(id).then((result) => {
-        $scope.perfil = result;
-      }).catch((error) => {
-        swal({
-          text: "Ocorreu um erro ao buscar o perfil no sistema",
-          type: "error",
-          confirmButtonClass: "btn-error",
-          confirmButtonText: "OK",
-          closeOnConfirm: false,
-          closeOnCancel: false
-        })
-      });
+
+      if (sessionStorage.user === undefined) {
+        PerfilService.get(id).then((result) => {
+          $scope.perfil = result;
+        }).catch((error) => {
+          swal({
+            text: "Ocorreu um erro ao buscar o perfil no sistema",
+            type: "error",
+            confirmButtonClass: "btn-error",
+            confirmButtonText: "OK",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          })
+        });
+      } else {
+        $scope.perfil = sessionStorage.user;
+      }
+
     }
+    //console.log(JSON.parse(sessionStorage.user));
+
 
     $scope.addLike = (id, parentId) => {
       $scope.posts.filter((post) => {
         if (post._id === id) {
           post.likes++;
-          let likeUpdate = {likes : post.likes};
+          let likeUpdate = {
+            likes: post.likes
+          };
           PostService.update(post._id, likeUpdate).then((result) => {
             console.log('ok like');
           })
@@ -54,7 +64,9 @@ app.controller("PostCtrl", [
       $scope.posts.filter((post) => {
         if (post._id === id) {
           post.dislikes++;
-          let likeUpdate = {dislikes : post.dislikes};
+          let likeUpdate = {
+            dislikes: post.dislikes
+          };
           PostService.update(post._id, likeUpdate).then((result) => {
             console.log('ok dislike');
           })
@@ -96,23 +108,45 @@ app.controller("PostCtrl", [
     };
 
     $scope.postar = (c = false) => {
+      //console.log(c)
       if (!c) {
-          PostService.insert($scope.objPost($scope.publicacao)).then((result) => {
-            $scope.posts.push($scope.objPost($scope.publicacao));
-          }).catch(error => {
-            swal({
-              text: "Ocorreu um erro ao buscar os posts no sistema",
-              type: "error",
-              confirmButtonClass: "btn-error",
-              confirmButtonText: "OK",
-              closeOnConfirm: false,
-              closeOnCancel: false
-            })
-          });
-        
+        PostService.insert($scope.objPost($scope.publicacao)).then((result) => {
+          $scope.posts.push($scope.objPost($scope.publicacao));
+        }).catch(error => {
+          swal({
+            text: "Ocorreu um erro ao buscar os posts no sistema",
+            type: "error",
+            confirmButtonClass: "btn-error",
+            confirmButtonText: "OK",
+            closeOnConfirm: false,
+            closeOnCancel: false
+          })
+        });
+
       } else {
-        c.comentarios.push($scope.objPost(c.comentario));
-        $scope.mostrarRespostas(c, true);
+        $scope.posts.filter((post) => {
+          if (post._id === c._id) {
+            let obj = $scope.objPost(c.comentario);
+            obj._parent_id = c._id;
+            post.comentarios.push(obj)
+            PostService.updateComments(c._id, {
+              comentarios: post.comentarios
+            }).then((result) => {
+              $scope.mostrarRespostas(c._id, c._id, true);
+            }).catch(error => {
+              swal({
+                text: "Ocorreu um erro ao buscar os posts no sistema",
+                type: "error",
+                confirmButtonClass: "btn-error",
+                confirmButtonText: "OK",
+                closeOnConfirm: false,
+                closeOnCancel: false
+              })
+            });
+
+          };
+        })
+
       }
       swal({
         text: "Publicado com sucesso!",

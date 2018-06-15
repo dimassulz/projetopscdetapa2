@@ -16,6 +16,22 @@ app.factory("PerfilService", function ($http) {
         return promise;
     };
 
+    thisPerfilService.entrar = (usuario) => {
+        
+        let promise = $http({
+            method: 'POST',
+            url: 'perfil/entrar',
+            data: usuario
+        })
+            .then((response) => {
+                return response.data;
+            },
+            (response) => {
+                return response.data;
+            });
+        return promise;
+    };
+
     thisPerfilService.get = (id) => {
         
         let promise = $http({
@@ -31,14 +47,8 @@ app.factory("PerfilService", function ($http) {
         return promise;
     };
 
-    thisPerfilService.insert = (firstName, lastName, age, active) => {
-        data = {
-            FirstName: firstName,
-            LastName: lastName,
-            Age: age,
-            Active: active,
-        };
-        
+    thisPerfilService.insert = (data) => {
+    
         let promise = $http({
             method: 'POST',
             url: 'perfil/insert',
@@ -55,13 +65,6 @@ app.factory("PerfilService", function ($http) {
     };
 
     thisPerfilService.update = (id, firstName, lastName, age, active) => {
-       data = {
-            AutoId : id,
-            FirstName: firstName,
-            LastName: lastName,
-            Age: age,
-            Active: active,
-        };
 
         let promise = $http({
             method: 'PUT',

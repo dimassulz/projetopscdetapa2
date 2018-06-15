@@ -41,7 +41,7 @@
         <div class="card-body register-card-body">
             <p class="login-box-msg">Novo usuário</p>
 
-            <form name="cadastro" ng-submit="cadastrarUsuario(cadastro.$valid)" novalidate>
+            <form name="cadastro"  ng-submit="cadastrarUsuario(cadastro.$valid)" novalidate>
                 <div class="form-group has-feedback">
                     <span class="fa fa-user form-control-feedback"></span>
                     <label class="control-label">Nome</label>
@@ -55,30 +55,37 @@
                     <div ng-show="cadastro.email.$invalid && !cadastro.email.$pristine" class="invalid-feedback">O campo e-mail é obrigatório</div>
                 </div>
                 <div class="form-group has-feedback">
+                    <span class="fa fa-user form-control-feedback"></span>
+                    <label class="control-label">Profissão</label>
+                    <input type="text" class="form-control" placeholder="Profissão" name="profissao" ng-model="usuario.profissao" required>
+                    <div ng-show="cadastro.profissao.$invalid && !cadastro.profissao.$pristine" class="invalid-feedback">O campo profissão é obrigatório</div>
+                </div>
+                
+                <div class="form-group has-feedback">
                     <span class="fa fa-building form-control-feedback"></span>
                     <label class="control-label">Empresas que já trabalhou </label>
                    
-                    <input type="text" class="form-control" placeholder="Período" name="periodo" ng-model="usuario.trabalhos[0].periodo" required>
+                    <input type="text" class="form-control" placeholder="Período 1" name="periodo1" ng-model="usuario.trabalhos[0].periodo" required>
                     <input type="text" class="form-control" placeholder="Nome Empresa" name="nomeempresa" ng-model="usuario.trabalhos[0].nome" required>
                     <hr>
-                    <input type="text" class="form-control" placeholder="Período" name="periodo" ng-model="usuario.trabalhos[1].periodo" >
+                    <input type="text" class="form-control" placeholder="Período 2" name="periodo2" ng-model="usuario.trabalhos[1].periodo" >
                     <input type="text" class="form-control" placeholder="Nome Empresa" name="nomeempresa" ng-model="usuario.trabalhos[1].nome" >
                     <hr>
-                    <input type="text" class="form-control" placeholder="Período" name="periodo" ng-model="usuario.trabalhos[2].periodo" >
+                    <input type="text" class="form-control" placeholder="Período 3" name="periodo3" ng-model="usuario.trabalhos[2].periodo" >
                     <input type="text" class="form-control" placeholder="Nome Empresa" name="nomeempresa" ng-model="usuario.trabalhos[2].nome" >
                 </div>
                 <div class="form-group has-feedback">
                     <span class="fa fa-book form-control-feedback"></span>
                     <label class="control-label">Formação </label>
                     
-                    <input type="text" class="form-control" placeholder="Período" name="periodouni" ng-model="usuario.estudos[0].periodo" required>
-                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni" ng-model="usuario.estudos[0].nome" required>
+                    <input type="text" class="form-control" placeholder="Período" name="periodouni1" ng-model="usuario.estudos[0].periodo" required>
+                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni1" ng-model="usuario.estudos[0].nome" required>
                     <hr>
-                    <input type="text" class="form-control" placeholder="Período" name="periodouni" ng-model="usuario.estudos[1].periodo" >
-                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni" ng-model="usuario.estudos[1].nome" >
+                    <input type="text" class="form-control" placeholder="Período" name="periodouni2" ng-model="usuario.estudos[1].periodo" >
+                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni2" ng-model="usuario.estudos[1].nome" >
                     <hr>
-                    <input type="text" class="form-control" placeholder="Período" name="periodouni" ng-model="usuario.estudos[2].periodo" >
-                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni" ng-model="usuario.estudos[2].nome" >
+                    <input type="text" class="form-control" placeholder="Período" name="periodouni3" ng-model="usuario.estudos[2].periodo" >
+                    <input type="text" class="form-control" placeholder="Nome Universidade" name="nomeuni3" ng-model="usuario.estudos[2].nome" >
                 </div>
                 <div class="form-group has-feedback">
                     <span class="fa fa-lock form-control-feedback"></span>
@@ -104,7 +111,7 @@
                 </div>
             </form>
 
-            <a href="index.html" class="text-center">Eu já sou cadastrado</a>
+            <a href="/login" class="text-center">Eu já sou cadastrado</a>
         </div>
         <!-- /.form-box -->
     </div>
@@ -122,6 +129,7 @@
 <script src="node_modules/angular/angular.min.js"></script>
 <script src="node_modules/angular/angular-sanitize.min.js"></script>
 <script src="app/app.js"></script>
+<script src="app/services/PerfilService.js"></script>
 <script src="app/controllers/LoginCtrl.js"></script>
 <!-- CK Editor -->
 <script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>

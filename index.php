@@ -22,6 +22,20 @@ $app->get('/perfil/get', function (Request $request, Response $response, $args) 
     return $response->withJson($result);
 });
 
+$app->post('/perfil/entrar', function (Request $request, Response $response, $args) {
+    $perfil = $request->getParsedBody();
+    $mongo = new dbHandler();
+    $result = $mongo->getLogin($perfil);
+    return $response->withJson($result);
+});
+
+$app->post('/perfil/insert', function (Request $request, Response $response, $args) {
+    $perfil = $request->getParsedBody();
+    $mongo = new dbHandler();
+    $result = $mongo->insertPerfil($perfil);
+    return $response->withJson($result);
+});
+
 $app->get('/perfil/get/{id}', function (Request $request, Response $response, $args) {
     $mongo = new dbHandler();
     $result = $mongo->getPerfil($args['id']);
@@ -51,6 +65,13 @@ $app->put('/post/update/{id}', function (Request $request, Response $response, $
     $arrPost = $request->getParsedBody();
     $mongo = new dbHandler();
     $result = $mongo->updatePost(intval($args['id']), $arrPost);
+    return $response->withJson( $result);
+});
+
+$app->put('/post/update-comments/{id}', function (Request $request, Response $response, $args) {
+    $arrPost = $request->getParsedBody();
+    $mongo = new dbHandler();
+    $result = $mongo->updateComments(intval($args['id']), $arrPost);
     return $response->withJson( $result);
 });
 

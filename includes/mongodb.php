@@ -13,6 +13,20 @@ class dbHandler {
     $this->collectionPosts = $c->redesocial->posts;
   }
 
+  public function getLogin($user){
+    $perfil = [];
+    try{
+
+      $result = $this->collectionPerfil->findOne($user);
+      foreach ($result as $chave => $valor) {
+        $perfil[$chave] = $valor;
+      }
+    }catch(Exception $e){ 
+      var_dump($e);exit;
+    }
+    return $perfil;
+  }
+
   public function getPerfil($id){
     $perfil = [];
     try{
@@ -24,6 +38,17 @@ class dbHandler {
       
     }
     return $perfil;
+  }
+
+  public function insertPerfil($perfil)
+  {
+    try{
+        $this->collectionPerfil->insertOne($perfil);
+    }catch(Exception $e){
+      var_dump($e);exit;
+      return false;
+    }
+    return $id;
   }
 
   public function getAllPerfis()
@@ -71,24 +96,42 @@ class dbHandler {
     try{
         $this->collectionPosts->insertOne($post);
     }catch(Exception $e){
-      return false;
+      var_dump($e);exit;
     }
     return $id;
   }
 
   private function comentariosId($comentarios){
+    $arr = [];
     foreach ( $comentarios as $c ) {
       $c['perfil']['_id'] = new MongoDB\BSON\ObjectID($c['perfil']['_id']['$oid'] );
       if(count($c['comentarios']) > 0){
         $this->comentariosId($c['comentarios']);
       }
+      $arr[] = $c;
     }
-    return $comentarios;
+    return $arr;
+  }
+
+  public function updateComments($id,$comments){
+    $resCom = self::comentariosId($comments['comentarios']);    
+    // var_dump($resCom);
+    try{
+      // var_dump($resCom);
+      $this->collectionPosts->updateOne(
+        array('_id' => $id),
+        array('$set' => ['comentarios' => $resCom])
+        );
+    }catch(Exception $e){
+        var_dump($e);exit;
+        return false;
+    }
   }
 
   public function updatePost($id,$post)
   {
     try{
+      // $post['perfil']['_id'] = new MongoDB\BSON\ObjectID($post['perfil']['id']);
       $this->collectionPosts->updateOne(
         array('_id' => $id),
         array('$set' => $post)

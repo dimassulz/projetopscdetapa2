@@ -17,22 +17,23 @@
   <link rel="stylesheet" href="plugins/iCheck/square/blue.css">
   <!-- Google Font: Source Sans Pro -->
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+  
 </head>
-<body class="hold-transition login-page">
+<body class="hold-transition login-page" >
 <div class="login-box">
   <div class="login-logo">
     <a href="home"><b>Rede de Compartilhamento </b>RC</a>
   </div>
   <!-- /.login-logo -->
-  <div class="card">
+  <div class="card" ng-app="redeApp" ng-controller="LoginCtrl">
     <div class="card-body login-card-body">
-      <form action="home" method="post">
+      <form name="login"  ng-submit="logar(login.$valid)" novalidate>
         <div class="form-group has-feedback">
-          <input type="email" class="form-control" placeholder="Email" value="joana.darc@babiloniasoftware.com.br">
+          <input type="email" class="form-control" placeholder="Email" required ng-model="usuario.email">
           <span class="fa fa-envelope form-control-feedback"></span>
         </div>
         <div class="form-group has-feedback">
-          <input type="password" class="form-control" placeholder="Senha" value="1234">
+          <input type="password" class="form-control" placeholder="Senha" required ng-model="usuario.senha" >
           <span class="fa fa-lock form-control-feedback"></span>
         </div>
         <div class="row">
@@ -45,7 +46,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
+            <button type="submit" class="btn btn-primary btn-block btn-flat" ng-disabled="login.$invalid">Entrar</button>
           </div>
           <!-- /.col -->
         </div>
@@ -66,7 +67,7 @@
         <a href="#">Esqueci a senha</a>
       </p>
       <p class="mb-0">
-        <a href="registro.html" class="text-center">Novo usuário</a>
+        <a href="cadastro" class="text-center">Novo usuário</a>
       </p>
     </div>
     <!-- /.login-card-body -->
@@ -88,6 +89,21 @@
       increaseArea : '20%' // optional
     })
   })
+</script>
+<script src="node_modules/angular/angular.min.js"></script>
+<script src="node_modules/angular/angular-sanitize.min.js"></script>
+<script src="app/app.js"></script>
+<script src="app/services/PerfilService.js"></script>
+<script src="app/controllers/LoginCtrl.js"></script>
+<!-- CK Editor -->
+<script src="https://cdn.ckeditor.com/4.9.2/standard/ckeditor.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ng-ckeditor/0.2.1/ng-ckeditor.min.js"></script>
+<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+
+<script src="node_modules/sweetalert2/dist/sweetalert2.all.min.js"></script>
+<script src="node_modules/sweetalert2/dist/sweetalert2.min.js"></script>
+<link rel="stylesheet" href="node_modules/sweetalert2/dist/sweetalert2.min.css">
+
 </script>
 </body>
 </html>
