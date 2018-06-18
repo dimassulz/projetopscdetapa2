@@ -1,4 +1,7 @@
 app.controller('LoginCtrl', ['$scope', 'PerfilService', ($scope, PerfilService) => {
+    $scope.usuario = {};
+    $scope.usuario.email = 'joana.darc@babiloniasoftware.com.br';
+    $scope.usuario.senha = '1234';
     $scope.cadastrarUsuario = (isValid) => {
         if (isValid) {
             $scope.usuario.foto = 'user1-128x128.jpg';

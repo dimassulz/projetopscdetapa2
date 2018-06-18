@@ -34,22 +34,24 @@ app.controller("PostCtrl", [
           })
         });
       } else {
-        $scope.perfil = sessionStorage.user;
+        $scope.perfil = JSON.parse(sessionStorage.user);
       }
 
     }
-    //console.log(JSON.parse(sessionStorage.user));
+   // console.log(JSON.parse(sessionStorage.user));
 
 
     $scope.addLike = (id, parentId) => {
       $scope.posts.filter((post) => {
+        // console.log("id: "+post._id);
+        // console.log("novoid:"+id );
         if (post._id === id) {
           post.likes++;
           let likeUpdate = {
             likes: post.likes
           };
           PostService.update(post._id, likeUpdate).then((result) => {
-            console.log('ok like');
+            // console.log('ok like');
           })
         }
         post.comentarios.filter((comentario) => {
